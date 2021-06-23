@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul></ul>
+    <script src="./ajax.js"></script>
+    <!-- callback  -->
+<script>
+    //get callback调用
+    get_callback('https://kg.zhaodashen.cn/v2/friends/index.php','pagenum=1&pagesize=3',res=>{
+        let html = ``
+        // console.log(res)
+        if(res.meta.state === 200){
+            res.data.list.forEach(item=> {
+                html += `<li>${item.id}             ${item.openid}        ${item.nickname}           ${item.location}</li>`
+            });
+            document.querySelector('ul').innerHTML = html
+                get_callback('https://kg.zhaodashen.cn/v2/friends/index.php','pagenum=3&pagesize=2',res=>{
+            if(res.meta.state === 200){
+                res.data.list.forEach(item=> {
+                    html += `<li>${item.id}             ${item.openid}        ${item.nickname}</li>`
+                });
+                document.querySelector('ul').innerHTML = html   
+                get_callback('https://kg.zhaodashen.cn/v2/friends/index.php','pagenum=2&pagesize=4',res=>{
+            if(res.meta.state === 200){
+                res.data.list.forEach(item=> {
+                    html += `<li>${item.id}<img src='${item.avatar}'/></li>`
+                });
+                document.querySelector('ul').innerHTML = html            
+            } })         
+            } })
+        }
+    })
+</script>
+<!-- promise -->
+<script>
+    let html = ``
+    axios('https://kg.zhaodashen.cn/v2/friends/index.php',`pagenum=2&pagesize=4`)
+    .then(res=>{
+        if(res.meta.state === 200){
+            res.data.list.forEach(item=> {
+                html += `<li>${item.id}             ${item.openid}        ${item.nickname}           ${item.location}</li>`
+            });
+            document.querySelector('ul').innerHTML = html
+            return axios('https://kg.zhaodashen.cn/v2/friends/index.php',`pagenum=1&pagesize=2`)
+    }})
+    .then(res=>{
+        if(res.meta.state === 200){
+            res.data.list.forEach(item=> {
+                html += `<li>${item.id}    ${item.location}</li>`
+            });
+            document.querySelector('ul').innerHTML = html
+            return axios('https://kg.zhaodashen.cn/v2/friends/index.php',`pagenum=1&pagesize=2`)
+    }})
+    .then(res=>{
+        if(res.meta.state === 200){
+            res.data.list.forEach(item=> {
+                html += `<li>${item.id}<img src='${item.avatar}'/></li>`
+            });
+            document.querySelector('ul').innerHTML = html
+    }})
+    .catch(err=>{alert(err)})
+</script>
+<!-- async await -->
+<script>
+    let html = ``
+    async function fn(){
+        let q1 = await axios('https://kg.zhaodashen.cn/v2/friends/index.php',`pagenum=2&pagesize=4`)
+        q1.data.list.forEach(item=> {
+                html += `<li>${item.id}<img src='${item.avatar}'/></li>`
+            });
+            document.querySelector('ul').innerHTML = html
+
+            let q2 = await axios('https://kg.zhaodashen.cn/v2/friends/index.php',`pagenum=3&pagesize=3`)
+        q2.data.list.forEach(item=> {
+                html += `<li>${item.id}    ${item.location}</li>`
+            });
+            document.querySelector('ul').innerHTML = html
+
+            let q3 = await axios('https://kg.zhaodashen.cn/v2/friends/index.php',`pagenum=1&pagesize=4`)
+            q3.data.list.forEach(item=> {
+                html += `<li>${item.id} ${item.nickname}<img src='${item.avatar}'/></li>`
+            });
+            document.querySelector('ul').innerHTML = html
+    }
+    fn()
+</script>
+</body>
+</html>

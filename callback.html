@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button>获取堵车吗数据</button>
+    <ul></ul>
+    <script src="./ajax.js"></script>
+    <script>
+       const btn =  document.querySelector('button')
+        btn.onclick= function(){
+            get_callback('https://kg.zhaodashen.cn/v2/friends/index.php', 'pagenum=1&pagesize=1', res=>{
+            let html = ``
+            res.data.list.forEach(item => {
+                html += `<li>${item.nickname}<img src="${item.avatar}"/></li>`
+            });
+            document.querySelector('ul').innerHTML = html
+            get_callback('https://kg.zhaodashen.cn/v2/friends/index.php', 'pagenum=2&pagesize=5', res=>{
+            res.data.list.forEach(item => {
+                html += `<li>${item.nickname}${item.id}</li>`
+            });
+            document.querySelector('ul').innerHTML = html})
+            get_callback('https://kg.zhaodashen.cn/v2/friends/index.php', 'pagenum=3&pagesize=5', res=>{
+            res.data.list.forEach(item => {
+                html += `<li>${item.id}${item.nickname}</li>`
+            });
+            document.querySelector('ul').innerHTML = html})
+        })  
+}
+        
+
+    </script>
+</body>
+</html>

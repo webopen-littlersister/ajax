@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button>获取堵车吗数据</button>
+    <ul></ul>
+    <script src="./ajax.js"></script>
+    <script>
+        const btn =  document.querySelector('button')
+        btn.onclick= function(){
+        axios('https://kg.zhaodashen.cn/v2/friends/index.php','pagenum=3&pagesize=2')
+        .then(res=>{
+            console.log(res)
+            let html =``
+            res.data.list.forEach(item => {
+                html += `<li>${item.id}${item.location}</li>`
+            })
+            document.querySelector('ul').innerHTML = html
+            return axios('https://kg.zhaodashen.cn/v2/friends/index.php','pagenum=1&pagesize=3')
+        }).then(res=>{
+            console.log(res)
+            let html =``
+            res.data.list.forEach(item => {
+                html += `<li>${item.id}${item.nickname}</li>`
+            })
+            document.querySelector('ul').innerHTML += html
+            return axios('https://kg.zhaodashen.cn/v2/friends/index.php','pagenum=2&pagesize=4')
+        }).then(res=>{
+            console.log(res)
+            let html =``
+            res.data.list.forEach(item => {
+                html += `<li>${item.id}${item.nickname}</li>`
+            })
+            document.querySelector('ul').innerHTML += html
+        })
+        .catch(err=>{
+            alert(err)
+        })
+    }
+    </script>
+</body>
+</html>

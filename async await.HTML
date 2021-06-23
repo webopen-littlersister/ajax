@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button>获取堵车吗数据</button>
+    <ul></ul>
+    <script src="./ajax.js"></script>
+    <script>
+       const btn =  document.querySelector('button')
+        btn.onclick=fn
+        async function fn(){
+            let p1 = await axios('https://kg.zhaodashen.cn/v2/friends/index.php','pagenum=3&pagesize=3')
+            let html =``
+            p1.data.list.forEach(item => {
+                html += `<li>${item.id}${item.nickname}</li>`
+            })
+            document.querySelector('ul').innerHTML += html
+
+             let p2 = await axios('https://kg.zhaodashen.cn/v2/friends/index.php','pagenum=1&pagesize=2')
+             p2.data.list.forEach(item => {
+                html += `<li>${item.id}${item.nickname}</li>`
+            })
+            document.querySelector('ul').innerHTML += html
+            let p3 = await axios('https://kg.zhaodashen.cn/v2/friends/index.php','pagenum=2&pagesize=2')
+            p3.data.list.forEach(item => {
+                html += `<li>${item.id}${item.nickname}</li>`
+            })
+            document.querySelector('ul').innerHTML += html
+            let p4 = await axios('https://kg.zhaodashen.cn/v2/friends/index.php','pagenum=4&pagesize=2')
+            p4.data.list.forEach(item => {
+                html += `<li>${item.id}${item.nickname}</li>`
+            })
+            document.querySelector('ul').innerHTML += html
+}
+        
+
+    </script>
+</body>
+</html>
